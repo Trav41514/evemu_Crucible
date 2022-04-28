@@ -93,7 +93,7 @@ public:
     ~DungeonMgr();
 
 
-    bool Init(AnomalyMgr* anomMgr, SpawnMgr* spawnMgr);
+    bool Init(std::shared_ptr<AnomalyMgr> anomMgr, std::shared_ptr<SpawnMgr> spawnMgr);
     void Process();
     void Load();
 
@@ -110,8 +110,8 @@ protected:
 private:
     bool m_initalized;
 
-    AnomalyMgr* m_anomMgr;
-    SpawnMgr* m_spawnMgr;
+    std::shared_ptr<AnomalyMgr> m_anomMgr;
+    std::shared_ptr<SpawnMgr> m_spawnMgr;
     SystemManager* m_system;
     PyServiceMgr& m_services;
 

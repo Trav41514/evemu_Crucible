@@ -379,13 +379,13 @@ public:
     virtual bool                LoadExtras();
 
     /* generic access functions handled here */
-    BeltMgr*                    GetBeltMgr()            { return m_beltMgr; }
+    std::shared_ptr<BeltMgr>    GetBeltMgr()            { return m_beltMgr; }
 
     /* specific functions handled in this class. */
-    void                   SetBeltMgr(BeltMgr* beltMgr) { m_beltMgr = beltMgr; }
+    void   SetBeltMgr(std::shared_ptr<BeltMgr> beltMgr) { m_beltMgr = beltMgr; }
 
 protected:
-    BeltMgr*                    m_beltMgr;
+    std::shared_ptr<BeltMgr>    m_beltMgr;
 };
 
 class StargateSE

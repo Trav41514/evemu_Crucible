@@ -85,7 +85,7 @@ AnomalyMgr::~AnomalyMgr()
     */
 }
 
-bool AnomalyMgr::Init(BeltMgr* beltMgr, DungeonMgr* dungMgr, SpawnMgr* spawnMgr) {
+bool AnomalyMgr::Init(std::shared_ptr<BeltMgr> beltMgr, std::shared_ptr<DungeonMgr> dungMgr, std::shared_ptr<SpawnMgr> spawnMgr) {
     m_beltMgr = beltMgr;
     m_dungMgr = dungMgr;
     m_spawnMgr = spawnMgr;

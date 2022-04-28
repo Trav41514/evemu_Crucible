@@ -120,11 +120,6 @@ SystemManager::~SystemManager() {
 
     if (m_loaded)
         UnloadSystem();
-
-    SafeDelete(m_dungMgr);
-    SafeDelete(m_anomMgr);
-    SafeDelete(m_beltMgr);
-    SafeDelete(m_spawnMgr);
 }
 
 bool SystemManager::BootSystem() {

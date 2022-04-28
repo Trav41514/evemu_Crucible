@@ -105,10 +105,10 @@ public:
     uint32 GetSysNPCCount()                             { return m_npcs.size(); }
 
     // CosmicMgr interface
-    BeltMgr* GetBeltMgr()                               { return m_beltMgr; }
-    SpawnMgr* GetSpawnMgr()                             { return m_spawnMgr; }
-    AnomalyMgr* GetAnomMgr()                            { return m_anomMgr; }
-    DungeonMgr* GetDungMgr()                            { return m_dungMgr; }
+    std::shared_ptr<BeltMgr> GetBeltMgr()               { return m_beltMgr;  }
+    std::shared_ptr<SpawnMgr> GetSpawnMgr()             { return m_spawnMgr; }
+    std::shared_ptr<AnomalyMgr> GetAnomMgr()            { return m_anomMgr;  }
+    std::shared_ptr<DungeonMgr> GetDungMgr()            { return m_dungMgr;  }
 
     // range is 0.1 for 1.0 system to 2.0 for -0.9 system
     float GetSecValue()                                 { return m_secValue; }
@@ -176,10 +176,10 @@ protected:
     bool LoadPlayerDynamics();
 
 private:
-    AnomalyMgr* m_anomMgr;      //we own this, never NULL.
-    BeltMgr* m_beltMgr;         //we own this, never NULL.
-    DungeonMgr* m_dungMgr;      //we own this, never NULL.
-    SpawnMgr* m_spawnMgr;       //we own this, never NULL.
+    std::shared_ptr<AnomalyMgr> m_anomMgr;
+    std::shared_ptr<BeltMgr>    m_beltMgr;
+    std::shared_ptr<DungeonMgr> m_dungMgr;
+    std::shared_ptr<SpawnMgr>   m_spawnMgr;
 
     PyServiceMgr& m_services;
     SolarSystemRef m_solarSystemRef;

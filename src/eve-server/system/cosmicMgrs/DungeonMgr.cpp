@@ -8,7 +8,7 @@
   * @updated:       27 August 2017
   */
 
-
+#include "eve-core.h"
 #include "eve-server.h"
 
 #include "EVEServerConfig.h"
@@ -180,7 +180,7 @@ DungeonMgr::~DungeonMgr()
      */
 }
 
-bool DungeonMgr::Init(AnomalyMgr* anomMgr, SpawnMgr* spawnMgr)
+bool DungeonMgr::Init(std::shared_ptr<AnomalyMgr> anomMgr, std::shared_ptr<SpawnMgr> spawnMgr)
 {
     m_anomMgr = anomMgr;
     m_spawnMgr = spawnMgr;

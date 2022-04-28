@@ -32,7 +32,7 @@ class AnomalyMgr
     AnomalyMgr(SystemManager* mgr, PyServiceMgr& svc);
     ~AnomalyMgr();
 
-    bool Init(BeltMgr* beltMgr, DungeonMgr* dungMgr, SpawnMgr* spawnMgr);
+    bool Init(std::shared_ptr<BeltMgr> beltMgr, std::shared_ptr<DungeonMgr> dungMgr, std::shared_ptr<SpawnMgr> spawnMgr);
     void Close();
     void Process();
 
@@ -63,9 +63,9 @@ protected:
 
 private:
     /* we do not own any of these (our sysmgr does) */
-    BeltMgr* m_beltMgr;
-    DungeonMgr* m_dungMgr;
-    SpawnMgr* m_spawnMgr;
+    std::shared_ptr<BeltMgr> m_beltMgr;
+    std::shared_ptr<DungeonMgr> m_dungMgr;
+    std::shared_ptr<SpawnMgr> m_spawnMgr;
     SystemManager* m_system;
     PyServiceMgr& m_services;
 

@@ -34,7 +34,7 @@ PyResult Command_siglist(Client* pClient, CommandDB* db, PyServiceMgr* services,
      *   will list all anomalies, by systemID.
      */
 
-    AnomalyMgr* pAM = pClient->SystemMgr()->GetAnomMgr();
+    auto pAM = pClient->SystemMgr()->GetAnomMgr();
     std::vector<CosmicSignature> sig;
     pAM->GetAnomalyList(sig);
     pAM->GetSignatureList(sig);
@@ -420,7 +420,7 @@ PyResult Command_beltlist(Client* pClient, CommandDB* db, PyServiceMgr* services
     std::vector<AsteroidSE*> invMap;
     invMap.clear();
     uint32 beltID = sBubbleMgr.GetBeltID(pClient->GetShipSE()->SysBubble()->GetID());
-    BeltMgr* belt = pClient->GetShipSE()->SystemMgr()->GetBeltMgr();
+    auto belt = pClient->GetShipSE()->SystemMgr()->GetBeltMgr();
     belt->GetList(beltID, invMap);
 
     std::ostringstream str;
