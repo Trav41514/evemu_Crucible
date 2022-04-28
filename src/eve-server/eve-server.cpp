@@ -24,6 +24,8 @@
  *    Rewrite:    Allan
  */
 
+#include <thread>
+
 #include "eve-server.h"
 // version
 #include "../eve-common/EVEVersion.h"
