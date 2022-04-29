@@ -63,6 +63,7 @@ m_npcDivisions(nullptr)
     m_oreBySecClass.clear();
     m_LootGroupTypeMap.clear();
     m_WrecksToTypesMap.clear();
+    m_regionSystems.clear();
 }
 
 StaticDataMgr::~StaticDataMgr()
@@ -636,6 +637,14 @@ void StaticDataMgr::Populate()
         m_agentSystem.emplace(row.GetInt(0), locationID);
     }
     sLog.Cyan("    StaticDataMgr", "%lu Agent Data Sets loaded in %.3fms.", m_agentSystem.size(), (GetTimeMSeconds() - startTime));
+
+    startTime = GetTimeMSeconds();
+    for(auto& cur : m_systemData) {
+        auto systemID = cur.first;
+        auto regionID = cur.second.regionID;
+        m_regionSystems[regionID].emplace_back(systemID);
+    }
+    sLog.Cyan("    StaticDataMgr", "Calculated systems in %lu regions in %.3fms.", m_regionSystems.size(), (GetTimeMSeconds() - startTime));
 
     //cleanup
     SafeDelete(res);

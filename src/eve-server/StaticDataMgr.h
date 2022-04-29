@@ -105,6 +105,8 @@ public:
     // get system data for given systemID
     bool                GetSolarSystemData(uint32 sysID, SolarSystemData &into);
 
+    std::vector<uint32> GetSystemsInRegion(uint32 regionID) { return m_regionSystems[regionID]; }
+
     uint8               GetStationCount(uint32 systemID);
     bool                GetStationList(uint32 systemID, std::vector< uint32 >& data);
 
@@ -174,6 +176,7 @@ private:
     std::map<uint16, Inv::GrpData>                      m_grpData;
     std::map<uint16, Inv::TypeData>                     m_typeData;
 
+    std::map<uint32, std::vector<uint32>>               m_regionSystems;    // regionID/systemID
     std::map<uint16, PyDict*>                           m_bpMatlData;       // typeID/dict*
     std::map<uint32, uint8>                             m_whRegions;        // regionID/classID
     std::map<uint32, std::vector<uint32>>               m_whClassDestinations; //classID/typeID
