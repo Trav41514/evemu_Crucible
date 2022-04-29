@@ -147,34 +147,17 @@ void MarketMgr::UpdatePriceHistory()
 // there is a 1 day difference (from 0000UTC) between "Old" and "New" prices
 PyRep *MarketMgr::GetNewPriceHistory(uint32 regionID, uint32 typeID) {
     PyRep* result(nullptr);
+
     std::string method_name ("GetNewHistory_");
     method_name += std::to_string(regionID);
     method_name += "_";
     method_name += std::to_string(typeID);
     ObjectCachedMethodID method_id("marketProxy", method_name.c_str());
+
     //check to see if this method is in the cache already.
     if (!m_manager->cache_service->IsCacheLoaded(method_id)) {
         //this method is not in cache yet, load up the contents and cache it
-        DBQueryResult res;
-
-        /** @todo  this doesnt belong here...  */
-        if (!sDatabase.RunQuery(res,
-            "SELECT historyDate, lowPrice, highPrice, avgPrice, volume, orders"
-            " FROM mktHistory "
-            " WHERE regionID=%u AND typeID=%u"
-            " AND historyDate > %li  LIMIT %u",
-            regionID, typeID, (m_timeStamp - EvE::Time::Day), sConfig.market.NewPriceLimit))
-        {
-            _log(DATABASE__ERROR, "Error in query: %s", res.error.c_str());
-            return nullptr;
-        }
-        _log(MARKET__DB_TRACE, "MarketMgr::GetNewPriceHistory() - Fetched %u buy orders for type %u in region %u from mktTransactions", res.GetRowCount(), typeID, regionID);
-
-        result = DBResultToCRowset(res);
-        if (result == nullptr) {
-            _log(MARKET__DB_ERROR, "Failed to load cache, generating empty contents.");
-            result = PyStatic.NewNone();
-        }
+        result = MarketDB::GetNewPriceHistory(regionID, typeID);
         m_manager->cache_service->GiveCache(method_id, &result);
     }
 
@@ -189,33 +172,17 @@ PyRep *MarketMgr::GetNewPriceHistory(uint32 regionID, uint32 typeID) {
 
 PyRep *MarketMgr::GetOldPriceHistory(uint32 regionID, uint32 typeID) {
     PyRep* result(nullptr);
+
     std::string method_name ("GetOldHistory_");
     method_name += std::to_string(regionID);
     method_name += "_";
     method_name += std::to_string(typeID);
     ObjectCachedMethodID method_id("marketProxy", method_name.c_str());
+
     //check to see if this method is in the cache already.
     if (!m_manager->cache_service->IsCacheLoaded(method_id)) {
         //this method is not in cache yet, load up the contents and cache it
-        DBQueryResult res;
-
-        /** @todo  this doesnt belong here...  */
-        if (!sDatabase.RunQuery(res,
-            "SELECT historyDate, lowPrice, highPrice, avgPrice, volume, orders"
-            " FROM mktHistory WHERE regionID=%u AND typeID=%u"
-            " AND historyDate > %li AND historyDate < %li LIMIT %u",
-            regionID, typeID, (m_timeStamp - (EvE::Time::Day *3)), (m_timeStamp - EvE::Time::Day), sConfig.market.OldPriceLimit))
-        {
-            _log(DATABASE__ERROR, "Error in query: %s", res.error.c_str());
-            return nullptr;
-        }
-        _log(MARKET__DB_TRACE, "MarketMgr::GetOldPriceHistory() - Fetched %u orders for type %u in region %u from mktHistory", res.GetRowCount(), typeID, regionID);
-
-        result = DBResultToCRowset(res);
-        if (result == nullptr) {
-            _log(MARKET__DB_ERROR, "Failed to load cache, generating empty contents.");
-            result = PyStatic.NewNone();
-        }
+        result = MarketDB::GetOldPriceHistory(regionID, typeID);
         m_manager->cache_service->GiveCache(method_id, &result);
     }
 

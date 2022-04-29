@@ -57,6 +57,8 @@ public:
     static uint32 FindSellOrder(Call_PlaceCharOrder &call);
     static uint32 StoreOrder(Market::SaveData& data);
 
+    static PyRep* GetNewPriceHistory(uint32 regionID, uint32 typeID);
+    static PyRep* GetOldPriceHistory(uint32 regionID, uint32 typeID);
 
     /* for base price estimator */
     static void GetShipIDs(std::map<uint16, Inv::TypeData>& data);

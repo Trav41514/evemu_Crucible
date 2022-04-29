@@ -343,6 +343,59 @@ uint32 MarketDB::StoreOrder(Market::SaveData &data) {
     return orderID;
 }
 
+PyRep *MarketDB::GetNewPriceHistory(uint32 regionID, uint32 typeID)
+{
+    DBQueryResult res;
+
+    if (!sDatabase.RunQuery(res,
+        "SELECT historyDate, lowPrice, highPrice, avgPrice, volume, orders"
+        " FROM mktHistory "
+        " WHERE regionID=%u AND typeID=%u"
+        " AND historyDate > %li  LIMIT %u",
+        regionID, typeID, (GetUpdateTime() - EvE::Time::Day), sConfig.market.NewPriceLimit))
+    {
+        _log(DATABASE__ERROR, "Error in query: %s", res.error.c_str());
+        return nullptr;
+    }
+    _log(MARKET__DB_TRACE, "MarketDB::GetNewPriceHistory() - Fetched %u buy orders for type %u in region %u from mktTransactions", res.GetRowCount(), typeID, regionID);
+
+    PyRep* result(nullptr);
+
+    result = DBResultToCRowset(res);
+    if (result == nullptr) {
+        _log(MARKET__DB_ERROR, "Failed to load cache, generating empty contents.");
+        result = PyStatic.NewNone();
+    }
+
+    return result;
+}
+
+PyRep *MarketDB::GetOldPriceHistory(uint32 regionID, uint32 typeID)
+{
+    DBQueryResult res;
+
+    if (!sDatabase.RunQuery(res,
+        "SELECT historyDate, lowPrice, highPrice, avgPrice, volume, orders"
+        " FROM mktHistory WHERE regionID=%u AND typeID=%u"
+        " AND historyDate > %li AND historyDate < %li LIMIT %u",
+        regionID, typeID, (GetUpdateTime() - (EvE::Time::Day *3)), (GetUpdateTime() - EvE::Time::Day), sConfig.market.OldPriceLimit))
+    {
+        _log(DATABASE__ERROR, "Error in query: %s", res.error.c_str());
+        return nullptr;
+    }
+    _log(MARKET__DB_TRACE, "MarketDB::GetOldPriceHistory() - Fetched %u orders for type %u in region %u from mktHistory", res.GetRowCount(), typeID, regionID);
+
+    PyRep* result(nullptr);
+
+    result = DBResultToCRowset(res);
+    if (result == nullptr) {
+        _log(MARKET__DB_ERROR, "Failed to load cache, generating empty contents.");
+        result = PyStatic.NewNone();
+    }
+
+    return result;
+}
+
 PyRep *MarketDB::GetTransactions(uint32 clientID, Market::TxData& data) {
     //transactionID, transactionDate, typeID, keyID, quantity, price,
     //  transactionType, clientID, regionID, stationID, corpTransaction, characterID
